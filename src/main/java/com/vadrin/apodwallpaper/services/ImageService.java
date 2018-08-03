@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,8 +83,11 @@ public class ImageService {
 	public File getProcessedImageFromFeed(Feed feed) throws IOException {
 		BufferedImage downloadedImage = downloadImageToFile(feed.getImageUrl());
 		BufferedImage resizedImage = resizeImage(downloadedImage);
-		BufferedImage editedImage = typeTitleAndDescriptionOnImage(resizedImage, feed.getTitle(),
-				feed.getDescription());
+
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MMM-YYYY");
+		String title = feed.getTitle() + " (" + feed.getDate().format(dateTimeFormatter) + ")";
+
+		BufferedImage editedImage = typeTitleAndDescriptionOnImage(resizedImage, title, feed.getDescription());
 		String format = feed.getImageUrl().toString().split("\\.")[feed.getImageUrl().toString().split("\\.").length
 				- 1];
 		File tempFile = File.createTempFile(TEMPFILENAME, "." + format);
