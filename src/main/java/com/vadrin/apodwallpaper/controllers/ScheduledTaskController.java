@@ -46,8 +46,8 @@ public class ScheduledTaskController {
 			LocalDate randomDay = randomDateService.nextDate(LocalDate.of(APODSTARTYEAR, APODSTARTMONTH, APODSTARTDATE),
 					LocalDate.now());
 			Feed apodFeed = apodFeedService.fetch(randomDay);
-			log.info("Recenived the feed {}", apodFeed.toString());
-			File wallpaper = imageService.downloadImageAndImposeTitle(apodFeed);
+			log.info("Received the feed {}", apodFeed.toString());
+			File wallpaper = imageService.getProcessedImageFromFeed(apodFeed);
 			osService.setWallpaper(wallpaper);
 			wallpaper.delete();
 			log.info("Completed setting new wallpaper at {}", dateFormat.format(new Date()));
