@@ -48,10 +48,14 @@ public class ScheduledTaskController {
 			Feed apodFeed = apodFeedService.fetch(randomDay);
 			log.info("Received the feed {}", apodFeed.toString());
 			File wallpaper = imageService.getProcessedImageFromFeed(apodFeed);
-			osService.setWallpaper(wallpaper);
+			log.info("Downloaded the image to {}", wallpaper.getAbsolutePath());
+			int exitCode = osService.setWallpaper(wallpaper);
+			log.info("Triggered WallpaperChanger and got exit code as {}", exitCode);
+			if(exitCode!=0)
+				throw new IOException();
 			wallpaper.delete();
 			log.info("Completed setting new wallpaper at {}", dateFormat.format(new Date()));
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			log.error("Exception while setting new wallpaper", e);
 		}
 	}
